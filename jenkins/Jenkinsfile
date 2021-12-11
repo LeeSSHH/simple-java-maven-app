@@ -1,29 +1,17 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
+    environment {
+        PROJECT_PATH = "/root/simple-java-maven-app"
     }
+    agent any
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn -f ${PROJECT_PATH}/pom.xml -B -DskipTests clean package'
             }
         }
-        stage('Test') {
+        stage('Run') {
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'java -jar ${PROJECT_PATH}/target/my-app.jar'
             }
         }
     }
