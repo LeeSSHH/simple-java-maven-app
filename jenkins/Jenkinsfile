@@ -6,12 +6,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -f ${PROJECT_PATH}/pom.xml -B -DskipTests clean package'
+                mvn -f ${PROJECT_PATH}/pom.xml -B -DskipTests clean package
             }
         }
         stage('Run') {
             steps {
-                sh 'java -jar ${PROJECT_PATH}/target/my-app.jar'
+                java -jar ${PROJECT_PATH}/target/my-app.jar
             }
         }
     }
